@@ -33,7 +33,7 @@ void Widget::on_Quitar_clicked()
 
 void Widget::on_buscar_clicked()
 {
-    if (!mSocket)
+    if (mSocket)
     {
         QMessageBox::information(this,"Servidor","Se ha encontrado");
     }else{

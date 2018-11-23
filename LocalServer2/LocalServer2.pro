@@ -12,12 +12,16 @@ SOURCES += \
         main.cpp \
         widget.cpp \
     localserver.cpp \
-    thread.cpp
+    thread.cpp \
+    splay.cpp \
+    arbolsplay.cpp
 
 HEADERS += \
         widget.h \
     localserver.h \
-    thread.h
+    thread.h \
+    nodo.h \
+    arbolsplay.h
 
 FORMS += \
         widget.ui
