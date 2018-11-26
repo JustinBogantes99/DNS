@@ -45,6 +45,8 @@ struct node* newNode(QString pDominio,QString pIp)
     node->dominio= pDominio;
     node->ip=pIp;
     node->left  = node->right  = NULL;
+
+
     return (node);
 }
 struct node *rightRotate(struct node *x)
@@ -63,17 +65,17 @@ struct node *leftRotate(struct node *x)
 }
 struct node *splay(struct node *root, QString pDominio)
 {
-    if (root == NULL || root->dominio.length()==0) return root;
-    if (root->dominio.compare(pDominio)>0)
+    if (root == NULL || root->dominio.size()==pDominio.size()) return root;
+    if (root->dominio.size()>pDominio.size())
     {
         if (root->left == NULL) return root;
 
-        if (root->left->dominio.length()>pDominio.length())
+        if (root->left->dominio.size()>pDominio.size())
         {
             root->left->left = splay(root->left->left, pDominio);
             root = rightRotate(root);
         }
-        else if (root->left->dominio.length()<pDominio.length())
+        else if (root->left->dominio.size()<pDominio.size())
         {
             root->left->right = splay(root->left->right, pDominio);
             if (root->left->right != NULL)
@@ -86,13 +88,13 @@ struct node *splay(struct node *root, QString pDominio)
         if (root->right == NULL) return root;
 
 
-        if (root->right->dominio.length()>pDominio.length())
+        if (root->right->dominio.size()>pDominio.size())
         {
             root->right->left = splay(root->right->left, pDominio);
             if (root->right->left != NULL)
                 root->right = rightRotate(root->right);
         }
-        else if (root->right->dominio.length()<pDominio.length())
+        else if (root->right->dominio.size()<pDominio.size())
         {
             root->right->right = splay(root->right->right, pDominio);
             root = leftRotate(root);
@@ -112,20 +114,25 @@ struct node *insert(struct node *root, QString pDominio, QString pIp)
 {
     // Simple Case: If tree is empty
     if (root == NULL) return newNode(pDominio,pIp);
+
     // Bring the closest leaf node to root
     root = splay(root, pDominio);
+
     // If key is already present, then return
-    if (root->dominio.length()==pDominio.length()) return root;
+    if (root->dominio.size()==pDominio.size()) return root;
+
     // Otherwise allocate memory for new node
     struct node *newnode  = newNode(pDominio,pIp);
+
     // If root's key is greater, make root as right child
     // of newnode and copy the left child of root to newnode
-    if (root->dominio.length()> pDominio.length())
+    if (root->dominio.size()> pDominio.size())
     {
         newnode->right = root;
         newnode->left = root->left;
         root->left = NULL;
     }
+
     // If root's key is smaller, make root as left child
     // of newnode and copy the right child of root to newnode
     else
@@ -134,6 +141,7 @@ struct node *insert(struct node *root, QString pDominio, QString pIp)
         newnode->right = root->right;
         root->right = NULL;
     }
+
     return newnode; // newnode becomes new root
 }
 // The delete function for Splay tree. Note that this function
