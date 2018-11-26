@@ -45,8 +45,6 @@ struct node* newNode(QString pDominio,QString pIp)
     node->dominio= pDominio;
     node->ip=pIp;
     node->left  = node->right  = NULL;
-
-
     return (node);
 }
 struct node *rightRotate(struct node *x)
@@ -70,12 +68,12 @@ struct node *splay(struct node *root, QString pDominio)
     {
         if (root->left == NULL) return root;
 
-        if (root->left->dominio.length()>0)
+        if (root->left->dominio.length()>pDominio.length())
         {
             root->left->left = splay(root->left->left, pDominio);
             root = rightRotate(root);
         }
-        else if (root->left->dominio.length()<0)
+        else if (root->left->dominio.length()<pDominio.length())
         {
             root->left->right = splay(root->left->right, pDominio);
             if (root->left->right != NULL)
@@ -88,13 +86,13 @@ struct node *splay(struct node *root, QString pDominio)
         if (root->right == NULL) return root;
 
 
-        if (root->right->dominio.length()>0)
+        if (root->right->dominio.length()>pDominio.length())
         {
             root->right->left = splay(root->right->left, pDominio);
             if (root->right->left != NULL)
                 root->right = rightRotate(root->right);
         }
-        else if (root->right->dominio.length()<0)
+        else if (root->right->dominio.length()<pDominio.length())
         {
             root->right->right = splay(root->right->right, pDominio);
             root = leftRotate(root);
