@@ -22,14 +22,10 @@ private slots:
     void on_Quitar_clicked();
 
     void on_buscar_clicked();
-
-    //void bytesWritten(qint64 bytes);
-
 private:
     Ui::Widget *ui;
     QTcpSocket *mSocket;
-    QString* servidorActual;
-    bool writeData(QByteArray data);
+    QString servidorActual;
 };
 
 #endif // WIDGET_H

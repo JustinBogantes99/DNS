@@ -9,13 +9,14 @@ LocalServer::LocalServer(QObject *parent) : QTcpServer(parent)
     connect(this,&LocalServer::newConnection, [&]() {
         mSocket = nextPendingConnection();
     });
-    connect(mSocket, SIGNAL(readyRead()), this, SLOT(readSocket()));
 }
 using namespace std;
 void LocalServer::recibe()
 {
     QByteArray data = mSocket->readAll();
-    cout<<data.toStdString()<<endl;
+    mSocket->flush();
+    cout<<data.toStdString();
+    //cout<<data.toStdString()<<endl;
 }
 void LocalServer::envia(const QString &msj)
 {
@@ -25,3 +26,4 @@ void LocalServer::envia(const QString &msj)
         mSocket->flush();
     }
 }
+
