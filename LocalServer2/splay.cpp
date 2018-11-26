@@ -1,28 +1,54 @@
 // The code is adopted from http://goo.gl/SDH9hH
 #include<stdio.h>
 #include<stdlib.h>
-
+#include <QDebug>
+#include <QList>
+#include <QStringList>
 // An AVL tree node
-
 struct node
 {
-    int key;
+
+    QString dominio;
+    QString ip;
     struct node *left, *right;
 };
+struct node* newNode(QString pDominio,QString pIp);
+struct node *rightRotate(struct node *x);
+struct node *leftRotate(struct node *x);
+struct node *splay(struct node *root, QString pDominio);
+struct node *search(struct node *root,QString pDominio);
+struct node *insert(struct node *root, QString pDominio, QString pIp);
+struct node* delete_key(struct node *root, QString pDominio);
+void imprimirArbol(struct node *root,int altura);
+struct node*  getToPythonFormat(QString tree);
+QStringList splitComas(QString string);
+QString passToPythonFormat(struct node *root);
 
-/* Helper function that allocates a new node with the given key and
-    NULL left and right pointers. */
-template<class T>
-struct node* newNode(T key)
+
+void imprimirArbol(struct node *root,int altura){
+    QString espacios="";
+    for(int n=0;n<altura;n++){
+        espacios+=" ";
+    }
+    qDebug()<<espacios<<root->dominio<<root->ip;
+    if(root->left!=0){
+
+        imprimirArbol((root->left),altura+1);
+    }
+    if(root->right!=0){
+         imprimirArbol((root->right),altura+1);
+    }
+}
+struct node* newNode(QString pDominio,QString pIp)
 {
-    struct node* node = (struct node*)malloc(sizeof(struct node));
-    node->key   = key;
+    struct node* node = new struct node;
+    node->dominio= pDominio;
+    node->ip=pIp;
     node->left  = node->right  = NULL;
+
+
     return (node);
 }
-
-// A utility function to right rotate subtree rooted with y
-// See the diagram given above.
 struct node *rightRotate(struct node *x)
 {
     struct node *y = x->left;
@@ -30,9 +56,6 @@ struct node *rightRotate(struct node *x)
     y->right = x;
     return y;
 }
-
-// A utility function to left rotate subtree rooted with x
-// See the diagram given above.
 struct node *leftRotate(struct node *x)
 {
     struct node *y = x->right;
@@ -40,105 +63,71 @@ struct node *leftRotate(struct node *x)
     y->left = x;
     return y;
 }
-
-// This function brings the key at root if key is present in tree.
-// If key is not present, then it brings the last accessed item at
-// root.  This function modifies the tree and returns the new root
-struct node *splay(struct node *root, int key)
+struct node *splay(struct node *root, QString pDominio)
 {
-    // Base cases: root is NULL or key is present at root
-    if (root == NULL || root->key == key)
-        return root;
-
-    // Key lies in left subtree
-    if (root->key > key)
+    if (root == NULL || root->dominio.length()==0) return root;
+    if (root->dominio.compare(pDominio)>0)
     {
-        // Key is not in tree, we are done
         if (root->left == NULL) return root;
 
-        // Zig-Zig (Left Left)
-        if (root->left->key > key)
+        if (root->left->dominio.length()>0)
         {
-            // First recursively bring the key as root of left-left
-            root->left->left = splay(root->left->left, key);
-
-            // Do first rotation for root, second rotation is done after else
+            root->left->left = splay(root->left->left, pDominio);
             root = rightRotate(root);
         }
-        else if (root->left->key < key) // Zig-Zag (Left Right)
+        else if (root->left->dominio.length()<0)
         {
-            // First recursively bring the key as root of left-right
-            root->left->right = splay(root->left->right, key);
-
-            // Do first rotation for root->left
+            root->left->right = splay(root->left->right, pDominio);
             if (root->left->right != NULL)
                 root->left = leftRotate(root->left);
         }
-
-        // Do second rotation for root
         return (root->left == NULL)? root: rightRotate(root);
     }
-    else // Key lies in right subtree
+    else
     {
-        // Key is not in tree, we are done
         if (root->right == NULL) return root;
 
-        // Zag-Zig (Right Left)
-        if (root->right->key > key)
-        {
-            // Bring the key as root of right-left
-            root->right->left = splay(root->right->left, key);
 
-            // Do first rotation for root->right
+        if (root->right->dominio.length()>0)
+        {
+            root->right->left = splay(root->right->left, pDominio);
             if (root->right->left != NULL)
                 root->right = rightRotate(root->right);
         }
-        else if (root->right->key < key)// Zag-Zag (Right Right)
+        else if (root->right->dominio.length()<0)
         {
-            // Bring the key as root of right-right and do first rotation
-            root->right->right = splay(root->right->right, key);
+            root->right->right = splay(root->right->right, pDominio);
             root = leftRotate(root);
         }
 
-        // Do second rotation for root
         return (root->right == NULL)? root: leftRotate(root);
     }
 }
 
-// The search function for Splay tree.  Note that this function
-// returns the new root of Splay Tree.  If key is present in tree
-// then, it is moved to root.
-template<class T>
-struct node *search(struct node *root, T key)
+struct node *search(struct node *root,QString pDominio)
 {
-    return splay(root, key);
+    return splay(root, pDominio);
 }
 
-// Function to insert a new key k in splay tree with given root
-template<class T>
-struct node *insert(struct node *root, T k)
+
+struct node *insert(struct node *root, QString pDominio, QString pIp)
 {
     // Simple Case: If tree is empty
-    if (root == NULL) return newNode(k);
-
+    if (root == NULL) return newNode(pDominio,pIp);
     // Bring the closest leaf node to root
-    root = splay(root, k);
-
+    root = splay(root, pDominio);
     // If key is already present, then return
-    if (root->key == k) return root;
-
+    if (root->dominio.length()==pDominio.length()) return root;
     // Otherwise allocate memory for new node
-    struct node *newnode  = newNode(k);
-
+    struct node *newnode  = newNode(pDominio,pIp);
     // If root's key is greater, make root as right child
     // of newnode and copy the left child of root to newnode
-    if (root->key > k)
+    if (root->dominio.length()> pDominio.length())
     {
         newnode->right = root;
         newnode->left = root->left;
         root->left = NULL;
     }
-
     // If root's key is smaller, make root as left child
     // of newnode and copy the right child of root to newnode
     else
@@ -147,24 +136,22 @@ struct node *insert(struct node *root, T k)
         newnode->right = root->right;
         root->right = NULL;
     }
-
     return newnode; // newnode becomes new root
 }
 // The delete function for Splay tree. Note that this function
 // returns the new root of Splay Tree after removing the key
-template<class T>
-struct node* delete_key(struct node *root, T key)
+struct node* delete_key(struct node *root, QString pDominio)
 {
     struct node *temp;
     if (!root)
         return NULL;
 
     // Splay the given key
-    root = splay(root, key);
+    root = splay(root,pDominio);
 
     // If key is not present, then
     // return root
-    if (key != root->key)
+    if (pDominio.compare(root->dominio) != 0)
         return root;
 
     // If key is present
@@ -186,7 +173,7 @@ struct node* delete_key(struct node *root, T key)
         the tree we get will have no right child tree
         and maximum node in left subtree will get splayed*/
         // New root
-        root = splay(root->left, key);
+        root = splay(root->left, pDominio);
 
         // Make right child of previous root  as
         // new root's right child
@@ -203,12 +190,52 @@ struct node* delete_key(struct node *root, T key)
 }
 // A utility function to print preorder traversal of the tree.
 // The function also prints height of every node
-void preOrder(struct node *root)
-{
-    if (root != NULL)
-    {
-        printf("%d ", root->key);
-        preOrder(root->left);
-        preOrder(root->right);
+QStringList splitComas(QString string){
+    QStringList resultado;
+
+   // qDebug()<<string;
+    int parentesis=0;
+    int ultimaComa=0;
+    int cantComas=0;
+    for(int n =0; n<string.length();n++){
+        if(string.at(n).toLatin1()=='['){
+            parentesis+=1;
+        }
+        else if(string.at(n).toLatin1()==']'){
+            parentesis-=1;
+        }
+        if(cantComas==2 && parentesis==0 ){
+            resultado.push_back(string.mid(ultimaComa,n+1-ultimaComa));
+        }
+        if((string.at(n).toLatin1()==',' )&& parentesis==0  ){
+            resultado.push_back(string.mid(ultimaComa,n-ultimaComa));
+            ultimaComa=n+1;
+            cantComas+=1;
+        }
     }
+    return resultado;
+}
+
+struct node*  getToPythonFormat(QString tree){
+    if(tree.compare("[]")==0){
+        return NULL;
+    }
+
+    QString resultado=tree.mid(1,tree.length()-2);
+    QStringList valores=splitComas(resultado);
+    QStringList parametros=QString(valores.at(0)).split(";");;
+    struct node*nuevoNodo=newNode(parametros.at(0),parametros.at(1));
+    nuevoNodo->left=getToPythonFormat(valores.at(1));
+    nuevoNodo->right=getToPythonFormat(valores.at(2));
+
+    return nuevoNodo;
+}
+QString passToPythonFormat(struct node *root){
+    if(root==NULL){
+        return "[]";
+    }
+    QString nodoValue=root->dominio +";"+root->ip;
+    QString resultado="";
+    resultado="["+nodoValue +","+ passToPythonFormat(root->left) +","+passToPythonFormat(root->right) +"]";
+    return resultado;
 }

@@ -9,6 +9,10 @@ LocalServer::LocalServer(QObject *parent) : QTcpServer(parent)
         mSocket = nextPendingConnection();
     });
 }
+void LocalServer::recibe(const QString &msj)
+{
+
+}
 void LocalServer::envia(const QString &msj)
 {
     if (mSocket) {

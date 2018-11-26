@@ -2,7 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
-
+#include <QAbstractSocket>
 namespace Ui {
 class Widget;
 }
@@ -13,6 +13,7 @@ class Widget : public QWidget
 
 public:
     explicit Widget(QWidget *parent = nullptr);
+    void displayError(QAbstractSocket::SocketError socketError);
     ~Widget();
 
 private slots:
@@ -25,6 +26,7 @@ private slots:
 private:
     Ui::Widget *ui;
     QTcpSocket *mSocket;
+    QString* servidorActual;
 };
 
 #endif // WIDGET_H

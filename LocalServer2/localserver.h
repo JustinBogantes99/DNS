@@ -1,6 +1,5 @@
 #ifndef LOCALSERVER_H
 #define LOCALSERVER_H
-
 #include <QObject>
 
 #include <QTcpServer>
@@ -11,9 +10,11 @@ class LocalServer : public QTcpServer
     Q_OBJECT
 public:
     explicit LocalServer(QObject *parent = nullptr);
+    void recibe(const QString &msj);
     void envia(const QString &msj);
 private:
     QTcpSocket *mSocket;
+
 };
 
 #endif // LOCALSERVER_H
