@@ -2,7 +2,7 @@
 #include <QTcpSocket>
 #include <QTextStream>
 #include <iostream>
-#include <splay.cpp>
+#include "splay.cpp"
 LocalServer::LocalServer(QObject *parent) : QTcpServer(parent)
 {
     mSocket = nullptr;
@@ -11,7 +11,6 @@ LocalServer::LocalServer(QObject *parent) : QTcpServer(parent)
         mSocket = nextPendingConnection();
         connect(mSocket, SIGNAL(readyRead()),this, SLOT(recibe()));
     });
-    struct node* arbolSplay = nullptr;
 }
 using namespace std;
 void LocalServer::recibe()

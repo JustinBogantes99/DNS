@@ -12,17 +12,6 @@ struct node
     QString ip;
     struct node *left, *right;
 };
-struct node* newNode(QString pDominio,QString pIp);
-struct node *rightRotate(struct node *x);
-struct node *leftRotate(struct node *x);
-struct node *splay(struct node *root, QString pDominio);
-struct node *search(struct node *root,QString pDominio);
-struct node *insert(struct node *root, QString pDominio, QString pIp);
-struct node* delete_key(struct node *root, QString pDominio);
-void imprimirArbol(struct node *root,int altura);
-struct node*  getToPythonFormat(QString tree);
-QStringList splitComas(QString string);
-QString passToPythonFormat(struct node *root);
 
 using namespace std;
 void imprimirArbol(struct node *root,int altura){
@@ -31,11 +20,11 @@ void imprimirArbol(struct node *root,int altura){
         espacios+=" ";
     }
     qDebug()<<espacios<<root->dominio<<root->ip;
-    if(root->left!=0){
+    if(root->left!=nullptr){
         qDebug()<<"PASS";
         imprimirArbol((root->left),altura+1);
     }
-    if(root->right!=0){
+    if(root->right!=nullptr){
         qDebug()<<"PASS II";
         imprimirArbol((root->right),altura+1);
     }
@@ -45,7 +34,7 @@ struct node* newNode(QString pDominio,QString pIp)
     struct node* node = new struct node;
     node->dominio= pDominio;
     node->ip=pIp;
-    node->left  = node->right  = NULL;
+    node->left  = node->right  = nullptr;
     return (node);
 }
 struct node *rightRotate(struct node *x)
@@ -64,10 +53,10 @@ struct node *leftRotate(struct node *x)
 }
 struct node *splay(struct node *root, QString pDominio)
 {
-    if (root == NULL || root->dominio.size()==pDominio.size()) return root;
+    if (root == nullptr || root->dominio.size()==pDominio.size()) return root;
     if (root->dominio.size()>pDominio.size())
     {
-        if (root->left == NULL) return root;
+        if (root->left == nullptr) return root;
 
         if (root->left->dominio.size()>pDominio.size())
         {
@@ -77,20 +66,20 @@ struct node *splay(struct node *root, QString pDominio)
         else if (root->left->dominio.size()<pDominio.size())
         {
             root->left->right = splay(root->left->right, pDominio);
-            if (root->left->right != NULL)
+            if (root->left->right != nullptr)
                 root->left = leftRotate(root->left);
         }
-        return (root->left == NULL)? root: rightRotate(root);
+        return (root->left == nullptr)? root: rightRotate(root);
     }
     else
     {
-        if (root->right == NULL) return root;
+        if (root->right == nullptr) return root;
 
 
         if (root->right->dominio.size()>pDominio.size())
         {
             root->right->left = splay(root->right->left, pDominio);
-            if (root->right->left != NULL)
+            if (root->right->left != nullptr)
                 root->right = rightRotate(root->right);
         }
         else if (root->right->dominio.size()<pDominio.size())
@@ -99,7 +88,7 @@ struct node *splay(struct node *root, QString pDominio)
             root = leftRotate(root);
         }
 
-        return (root->right == NULL)? root: leftRotate(root);
+        return (root->right == nullptr)? root: leftRotate(root);
     }
 }
 
@@ -225,7 +214,7 @@ QStringList splitComas(QString string){
 
 struct node*  getToPythonFormat(QString tree){
     if(tree.compare("[]")==0){
-        return NULL;
+        return nullptr;
     }
 
     QString resultado=tree.mid(1,tree.length()-2);
@@ -238,7 +227,7 @@ struct node*  getToPythonFormat(QString tree){
     return nuevoNodo;
 }
 QString passToPythonFormat(struct node *root){
-    if(root==NULL){
+    if(root==nullptr){
         return "[]";
     }
     QString nodoValue=root->dominio +";"+root->ip;

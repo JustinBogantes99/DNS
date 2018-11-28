@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QAbstractSocket>
+
 namespace Ui {
 class Widget;
 }
@@ -29,6 +30,7 @@ private:
     Ui::Widget *ui;
     QTcpSocket *mSocket;
     QString servidorActual;
+    //QWebView* view;
 };
 
 #endif // WIDGET_H

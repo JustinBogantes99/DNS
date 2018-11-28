@@ -1,6 +1,5 @@
 
-QT       += core gui widgets network
-
+QT       += core gui widgets network webkit
 TARGET = LocalServer2
 TEMPLATE = app
 
@@ -13,15 +12,13 @@ SOURCES += \
         widget.cpp \
     localserver.cpp \
     thread.cpp \
-    splay.cpp \
-    server.cpp
+    splay.cpp
 
 HEADERS += \
         widget.h \
     localserver.h \
     thread.h \
-    nodo.h \
-    server.h
+    nodo.h
 
 FORMS += \
         widget.ui

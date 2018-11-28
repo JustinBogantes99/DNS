@@ -1,7 +1,6 @@
 #ifndef LOCALSERVER_H
 #define LOCALSERVER_H
 #include <QObject>
-
 #include <QTcpServer>
 class QTcpSocket;
 
