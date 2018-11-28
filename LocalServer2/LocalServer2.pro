@@ -13,13 +13,15 @@ SOURCES += \
         widget.cpp \
     localserver.cpp \
     thread.cpp \
-    splay.cpp
+    splay.cpp \
+    server.cpp
 
 HEADERS += \
         widget.h \
     localserver.h \
     thread.h \
-    nodo.h
+    nodo.h \
+    server.h
 
 FORMS += \
         widget.ui

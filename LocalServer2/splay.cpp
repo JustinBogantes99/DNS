@@ -24,7 +24,7 @@ struct node*  getToPythonFormat(QString tree);
 QStringList splitComas(QString string);
 QString passToPythonFormat(struct node *root);
 
-
+using namespace std;
 void imprimirArbol(struct node *root,int altura){
     QString espacios="";
     for(int n=0;n<altura;n++){
@@ -32,11 +32,12 @@ void imprimirArbol(struct node *root,int altura){
     }
     qDebug()<<espacios<<root->dominio<<root->ip;
     if(root->left!=0){
-
+        qDebug()<<"PASS";
         imprimirArbol((root->left),altura+1);
     }
     if(root->right!=0){
-         imprimirArbol((root->right),altura+1);
+        qDebug()<<"PASS II";
+        imprimirArbol((root->right),altura+1);
     }
 }
 struct node* newNode(QString pDominio,QString pIp)
@@ -45,8 +46,6 @@ struct node* newNode(QString pDominio,QString pIp)
     node->dominio= pDominio;
     node->ip=pIp;
     node->left  = node->right  = NULL;
-
-
     return (node);
 }
 struct node *rightRotate(struct node *x)
@@ -113,10 +112,10 @@ struct node *search(struct node *root,QString pDominio)
 struct node *insert(struct node *root, QString pDominio, QString pIp)
 {
     // Simple Case: If tree is empty
-    if (root == NULL) return newNode(pDominio,pIp);
+    if (root == nullptr) return newNode(pDominio,pIp);
 
     // Bring the closest leaf node to root
-    root = splay(root, pDominio);
+    //root = splay(root, pDominio);
 
     // If key is already present, then return
     if (root->dominio.size()==pDominio.size()) return root;
@@ -128,18 +127,20 @@ struct node *insert(struct node *root, QString pDominio, QString pIp)
     // of newnode and copy the left child of root to newnode
     if (root->dominio.size()> pDominio.size())
     {
+        qDebug()<<"PASS III";
         newnode->right = root;
         newnode->left = root->left;
-        root->left = NULL;
+        root->left = nullptr;
     }
 
     // If root's key is smaller, make root as left child
     // of newnode and copy the right child of root to newnode
     else
     {
+        qDebug()<<"PASS IV";
         newnode->left = root;
         newnode->right = root->right;
-        root->right = NULL;
+        root->right = nullptr;
     }
 
     return newnode; // newnode becomes new root
@@ -150,7 +151,7 @@ struct node* delete_key(struct node *root, QString pDominio)
 {
     struct node *temp;
     if (!root)
-        return NULL;
+        return nullptr;
 
     // Splay the given key
     root = splay(root,pDominio);

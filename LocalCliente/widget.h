@@ -22,6 +22,9 @@ private slots:
     void on_Quitar_clicked();
 
     void on_buscar_clicked();
+
+public slots:
+    void leer_socketservidor();
 private:
     Ui::Widget *ui;
     QTcpSocket *mSocket;

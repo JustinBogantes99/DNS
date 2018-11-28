@@ -12,9 +12,7 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     mSocket = new QTcpSocket(this);
-    connect(mSocket,&QTcpSocket::readyRead, [&](){
-        QTextStream T(mSocket);
-        ui->listWidget->addItem(T.readAll());
+    connect(mSocket,&QTcpSocket::readyRead, [&](){QTextStream T(mSocket);ui->pantalla->addItem(T.readAll());
     });
 }
 
@@ -26,6 +24,7 @@ using namespace std;
 void Widget::on_conectar_clicked()
 {
     mSocket->connectToHost(ui->server->text(),ui->puerto->value());
+    connect(mSocket,SIGNAL(readyRead()),this,SLOT (leer_socketservidor()));
     connect(mSocket, QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error),
             this, &Widget::displayError);
     servidorActual = ui->server->text();
@@ -40,6 +39,13 @@ void Widget::on_conectar_clicked()
     }**/
 }
 
+void Widget::leer_socketservidor()
+{
+  QByteArray buffer;
+  buffer.resize((mSocket->bytesAvailable()));
+  mSocket->read(buffer.data(),buffer.size());
+  ui->pantalla->addItem(QString (buffer.data()));
+}
 void Widget::on_Quitar_clicked()
 {
     close();
@@ -56,10 +62,13 @@ void Widget::on_buscar_clicked()
        if(mSocket->state() == QAbstractSocket::ConnectedState)
        {
            QByteArray array;
-           cout<<servidorActual.toStdString();
-           cout<<paginaWeb.toStdString();
-           mSocket->write(servidorActual.toLocal8Bit());
-           mSocket->write(paginaWeb.toLocal8Bit());
+           //cout<<servidorActual.toStdString();
+           //cout<<paginaWeb.toStdString();
+           array.append(servidorActual);
+           array.append(paginaWeb);
+           mSocket->write(array , array.size());
+           ui->pagina->clear();
+           //mSocket->write(paginaWeb.toLocal8Bit());
        }
        else
            QMessageBox::critical(this,"Cliente","Error no hay conexion con el servidor");

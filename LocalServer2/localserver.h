@@ -10,8 +10,9 @@ class LocalServer : public QTcpServer
     Q_OBJECT
 public:
     explicit LocalServer(QObject *parent = nullptr);
-    void recibe();
     void envia(const QString &msj);
+public slots:
+    void recibe();
 private:
     QTcpSocket *mSocket;
     QString* servidorActual;
