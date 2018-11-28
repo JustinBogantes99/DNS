@@ -1,5 +1,5 @@
 
-QT       += core gui widgets network webkit
+QT       += core gui widgets network
 TARGET = LocalServer2
 TEMPLATE = app
 

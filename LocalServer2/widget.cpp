@@ -28,10 +28,6 @@ void Widget::escucha()
 {
     mLocalServer->recibe();
 }
-void Widget::on_Enviar_clicked()
-{
-    mLocalServer->envia(ui->msj->text());
-}
 
 void Widget::on_Quitar_clicked()
 {

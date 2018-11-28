@@ -19,8 +19,6 @@ public:
 private slots:
     void on_Iniciar_clicked();
 
-    void on_Enviar_clicked();
-
     void on_Quitar_clicked();
 
 private:

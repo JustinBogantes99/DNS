@@ -15,20 +15,6 @@
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Mensaje</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="msj"/>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <spacer name="horizontalSpacer">
@@ -51,13 +37,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="Enviar">
-       <property name="text">
-        <string>Enviar</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="Quitar">
        <property name="text">
         <string>Quitar</string>
@@ -66,7 +45,7 @@
      </item>
     </layout>
    </item>
-   <item row="2" column="0">
+   <item row="1" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label_2">

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets network webkit
+QT       += core gui widgets network
 
 TARGET = LocalCliente
 TEMPLATE = app
